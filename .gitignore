@@ -1,0 +1,18 @@
+# Only curated showcase files belong in this repository.
+/*
+!/README.md
+!/.gitignore
+!/docs/
+!/assets/
+!/.github/
+/docs/*
+!/docs/SUBMISSION.md
+!/docs/RESULTS.md
+!/docs/DEMO.md
+!/docs/results.json
+/assets/*
+!/assets/prototype.jpg
+/.github/*
+!/.github/workflows/
+/.github/workflows/*
+!/.github/workflows/showcase.yml

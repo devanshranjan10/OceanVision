@@ -1,0 +1,47 @@
+name: Showcase checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify showcase contents and links
+        shell: bash
+        run: |
+          python3 - <<'PYCODE'
+          import json, re, subprocess
+          from pathlib import Path
+          allowed = {"README.md", ".gitignore", ".github/workflows/showcase.yml", "docs/SUBMISSION.md", "docs/RESULTS.md", "docs/DEMO.md", "docs/results.json", "assets/prototype.jpg"}
+          tracked = set(subprocess.check_output(["git", "ls-files"], text=True).splitlines())
+          assert tracked == allowed, f"Unexpected or missing files: {tracked ^ allowed}. Implementation files are not permitted."
+          for name in tracked:
+              assert Path(name).stat().st_size < 2_000_000, f"File too large: {name}"
+          for name in sorted(tracked):
+              if not name.endswith(".md"):
+                  continue
+              for target in re.findall(r"!?\[[^\]]*\]\(([^)]+)\)", Path(name).read_text()):
+                  if target.startswith("https://") or target.startswith("#"):
+                      continue
+                  assert (Path(name).parent / target.split("#")[0]).exists(), f"Broken link in {name}: {target}"
+          d = json.loads(Path("docs/results.json").read_text())
+          result_doc = Path("docs/RESULTS.md").read_text()
+          for record in d["matched_2023_24"].values():
+              if isinstance(record, dict):
+                  assert record["simultaneously_supported_depths"] <= record["point_wins"] <= record["shared_depths"]
+                  for key in ("oceanvision_rmse_c", "reference_rmse_c"):
+                      assert f'{record[key]:.4f}' in result_doc
+          assert not d["claims"]["universal_sota"] and not d["claims"]["future_all_depth_guarantee"]
+          assert d["claims"]["original_2026_confirmation"] == "withdrawn"
+          for url in d["links"].values():
+              assert url in Path("docs/SUBMISSION.md").read_text(), f"Missing submission link: {url}"
+          assert Path("assets/prototype.jpg").read_bytes().startswith(b"\xff\xd8\xff")
+          print("PASS: showcase-only allowlist, documentation links, result labels and preview image")
+          PYCODE

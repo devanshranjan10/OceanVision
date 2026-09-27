@@ -1,0 +1,54 @@
+{
+  "project": "OceanVision",
+  "team": "ZenTechs",
+  "team_id": 130957,
+  "problem_statement": "SIH26066",
+  "updated": "2026-09-27",
+  "scope": "Published validation summary; not a fresh scoring run or implementation specification",
+  "links": {
+    "prototype": "https://oceanembed-prototype.vercel.app/",
+    "pitch": "https://youtu.be/BSgT3coOmeM",
+    "repository": "https://github.com/devanshranjan10/OceanVision"
+  },
+  "matched_2023_24": {
+    "mode": "delayed",
+    "floats": 96,
+    "support_verified_rows": 69183,
+    "incois": {
+      "oceanvision_rmse_c": 0.6778,
+      "reference_rmse_c": 0.8554,
+      "point_wins": 14,
+      "shared_depths": 14,
+      "simultaneously_supported_depths": 10
+    },
+    "glorys12": {
+      "oceanvision_rmse_c": 0.6885,
+      "reference_rmse_c": 0.7009,
+      "point_wins": 8,
+      "shared_depths": 14,
+      "simultaneously_supported_depths": 3
+    }
+  },
+  "independent_argo": {
+    "rmse_c": 0.7271,
+    "lineage": "separate GLORYS-only development model",
+    "glorys_validation_rmse_c": 0.6262,
+    "comparison": "different targets; not paired"
+  },
+  "historical_2025": {
+    "oceanvision_rmse_c": 0.5547,
+    "glorys12_rmse_c": 0.5927,
+    "point_wins": 12,
+    "depths": 15,
+    "status": "Earlier protocol, before final pipeline repairs"
+  },
+  "representation": {
+    "r2": 0.4749,
+    "pca_r2": 0.4272
+  },
+  "claims": {
+    "universal_sota": false,
+    "future_all_depth_guarantee": false,
+    "original_2026_confirmation": "withdrawn"
+  }
+}
